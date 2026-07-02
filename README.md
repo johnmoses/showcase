@@ -69,9 +69,9 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 ### Applied AI Systems
 | Repo | What it covers |
 |------|---------------|
-| [ultra-learning](https://github.com/johnmoses/ultra-learning) | AI-powered adaptive learning system (TypeScript) |
-| [sure-health](https://github.com/johnmoses/sure-health) | Multi-party AI healthcare platform (TypeScript) |
-| [easy-finance](https://github.com/johnmoses/easy-finance) | AI-powered financial platform (TypeScript) |
+| [ultra-learning](https://github.com/johnmoses/ultra-learning) | AI-powered adaptive learning system — Flask API (LLM + RAG + MCP) · Next.js web · React Native mobile |
+| [sure-health](https://github.com/johnmoses/sure-health) | Multi-party AI healthcare platform — Flask API (agents + LLM + RAG) · Next.js web · React Native mobile |
+| [easy-finance](https://github.com/johnmoses/easy-finance) | AI-powered financial platform — FastAPI (wealth + community + security services) · Next.js web · React Native mobile |
 | [zero-to-hero-python-ai](https://github.com/johnmoses/zero-to-hero-python-ai) | End-to-end ML/AI roadmap — CNNs, RNNs, Transformers, LLMs, Agentic AI |
 
 ### Specializations
@@ -93,11 +93,11 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 
 **AI/ML:** LLMs · RAG · AI Agents · MCP · Collaborative Filtering · Time-Series Forecasting · NLP · Computer Vision
 
-**Backend:** FastAPI · PostgreSQL · Redis · SQLite · REST · WebSockets
+**Backend:** FastAPI · Flask · PostgreSQL · Redis · SQLite · REST · WebSockets
 
 **Frontend:** Next.js · TypeScript · Tailwind CSS · React
 
-**Mobile:** Flutter · Dart · Offline-first (SQLite + sync queue)
+**Mobile:** Flutter · Dart · React Native · Offline-first (SQLite + sync queue)
 
 **DevOps:** Docker · GitHub Actions · AWS Lightsail · Railway · Nginx · fail2ban
 
