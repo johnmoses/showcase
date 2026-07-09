@@ -33,6 +33,10 @@ A full-stack attendance reporting platform for hierarchical church organizations
 - [Production infrastructure](snippets/devops_infrastructure.md) — Docker, Lightsail, hardening, rate limiting
 - [Outreach AI](snippets/outreach_ai.md) — engagement scoring, churn prediction, priority queue
 
+**Pre-AI-era foundation (built without AI assistance):**
+- [Custom transformer fine-tuning](snippets/transformer_finetuning.md) — BERT intent classifier (44 classes, 87.5% accuracy) + T5 text-to-SQL (ROUGE-L 0.961) + PEFT/LoRA on consumer hardware
+- [Conversational agent](snippets/conversational_agent.md) — multi-turn dialog state machine with entity extraction and autonomous DB writes (agentic pattern before LangChain existed)
+
 ---
 
 ### ShopStack360 — Universal Commerce Operating System
@@ -91,7 +95,7 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 
 ## Stack
 
-**AI/ML:** LLMs · RAG · AI Agents · MCP · Collaborative Filtering · Time-Series Forecasting · NLP · Computer Vision
+**AI/ML:** LLMs · RAG · AI Agents · MCP · Transformer Fine-Tuning (BERT, T5, PEFT/LoRA) · Collaborative Filtering · Time-Series Forecasting · NLP · Computer Vision
 
 **Backend:** FastAPI · Flask · PostgreSQL · Redis · SQLite · REST · WebSockets
 
