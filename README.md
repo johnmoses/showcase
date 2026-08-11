@@ -94,7 +94,7 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 | Repo | Credential | Score |
 |------|-----------|-------|
 | [coursera-genai-agents-specialization](https://github.com/johnmoses/coursera-genai-agents-specialization) | Building GenAI Applications and Agents (6 courses) | **All 100%** |
-| [coursera-nlp-specialization](https://github.com/johnmoses/coursera-nlp-specialization) | Coursera NLP Specialization | — |
+| [coursera-nlp-specialization](https://github.com/johnmoses/coursera-nlp-specialization) | Coursera NLP Specialization | C1–C3 100%, C4 97.5% |
 | [coursera-mlops-specialization](https://github.com/johnmoses/coursera-mlops-specialization) | Coursera MLOps for Production | C1–C3 100%, C4 98% |
 | [coursera-ai-4-medicine-specialization](https://github.com/johnmoses/coursera-ai-4-medicine-specialization) | Coursera AI for Medicine (3 courses) | **All 100%** |
 
@@ -128,15 +128,15 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 
 ## Credentials
 
-30 courses across 5 institutions — 22 at 100%, 7 above 95%.
+30 courses across 5 institutions — 22 at 100%, 7 above 95%. (Deep Learning: C3 & C5 100%, C1/C2/C4 97%+. NLP: C1–C3 100%, C4 97.5%.)
 
 | Area | Credential | Score |
 |------|-----------|-------|
 | GenAI & Agents | Building GenAI Applications and Agents Specialization (6 courses) | All 100% |
 | AI for Medicine | AI for Medicine Specialization (3 courses) — DenseNet/U-Net, Cox PH, GradCAM | All 100% |
 | MLOps | MLOps for Production Specialization (4 courses) | C1–C3 100%, C4 98% |
-| Deep Learning | Deep Learning Specialization (5 courses) | — |
-| NLP | Natural Language Processing Specialization (4 courses) | — |
-| Mathematics | Mathematics for ML: Linear Algebra 100% · Multivariate Calculus 100% · PCA 98.5% | — |
-| Finance/ML | Investment Management with Python & ML Specialization | 3 courses 100%, 1 at 96.89% |
+| Deep Learning | Deep Learning Specialization (5 courses) — Neural Nets 97%, Improving DNNs 97.99%, Structuring ML 100%, CNNs 97%, Sequence Models 100% | C3 & C5 100%, others 97%+ |
+| NLP | Natural Language Processing Specialization (4 courses) | C1–C3 100%, C4 97.5% |
+| Mathematics | Mathematics for ML: Linear Algebra 100% · Multivariate Calculus 100% · PCA 98.5% · Data Science Math Skills 100% | — |
+| Finance/ML | Investment Management with Python & ML Specialization (4 courses) — Portfolio Construction 100%, Advanced Portfolio Construction 100%, ML for Asset Management 96.89%, ML with Alternative Datasets 100% | 3 courses 100%, 1 at 96.89% |
 | Generative AI | Generative AI with LLMs | — |
