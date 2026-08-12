@@ -13,20 +13,20 @@
 ### Life Reports — Church Attendance Platform
 > 10,000+ users in week one · FastAPI + Flutter + Next.js · AWS Lightsail · $20/month
 
-A full-stack attendance reporting platform for hierarchical church organizations (Fellowship → Zone → District → Region → State). Built offline-first — works without internet, syncs when connected. Security: guest users (read-only), event workers (scoped/time-bound), 3-tier admins (team · general · super) — all enforced via FastAPI RBAC at the dependency injection layer.
+A full-stack attendance reporting platform for hierarchical church organizations (Fellowship → Zone → District → Region → State). Built offline-first — works without internet, syncs when connected. Security: guest, scoped event worker, and 3-tier admin roles enforced via FastAPI RBAC at the dependency injection layer.
 
 **AI highlights:**
-- **Unified Chat** — LangGraph supervisor + 6 specialist agents in one compiled StateGraph. Single interface for both report submission and data querying in natural language. Supervisor classifies intent via a 3-tier classifier: keyword scan → pending_report context → GPT-4o-mini fallback (max_tokens=10, temperature=0). Short confirmation words bypass classification entirely and route directly to the report agent if a pending_report exists. Report agent does multi-turn field collection — merges parsed fields, never overwrites filled fields, maps bare numbers to the last prompted field, resolves reporting center via recursive CTE tree walk + word-token fuzzy match. 5 specialist query agents (insights, list, forecast, comparison, missing) each write to a `raw_result` dict; a single format_agent renders to text / WhatsApp / PDF / Excel. Redis-backed session (2h TTL) with in-process dict fallback. Absorbed and replaced the predecessor two-graph LeaderQuery system.
-- **Voice capture pipeline** — Whisper (real-time transcription with dynamic context prompting) → GPT-4o-mini (structured field extraction via function calling) → regex fallback running in parallel. Offline-first with IndexedDB storage and server-side recovery endpoint that re-runs the full pipeline on reconnect. Handles Nigerian multilingual input (Hausa, Yoruba, Igbo, Efik, Idoma)
-- **Attendance anomaly detection** — flags consecutive member absences (≥3) and center-level drops (≥30%) across all centers automatically
-- **Outreach intelligence** — engagement scoring (attendance 35% + recency 30% + interactions 20% + stage 15%), churn prediction, and message variant generation by tone
+- **Unified Chat** — LangGraph supervisor + 6 specialist agents in one compiled StateGraph. Single interface for report submission and data querying in natural language. Supervisor classifies intent, report agent does multi-turn field collection, 5 query agents (insights, list, forecast, comparison, missing) each render to text / WhatsApp / PDF / Excel. Redis-backed session with in-process fallback.
+- **Voice capture pipeline** — Whisper (real-time transcription) → GPT-4o-mini (structured field extraction via function calling) → regex fallback running in parallel. Offline-first with server-side recovery on reconnect. Handles Nigerian multilingual input (Hausa, Yoruba, Igbo, Efik, Idoma)
+- **Attendance anomaly detection** — flags consecutive member absences and center-level attendance drops across all centers automatically
+- **Outreach intelligence** — engagement scoring, churn prediction, and message variant generation by tone
 - **Statistical trend analysis** — Redis-cached insights with cold-start handling for new centers
 
 **DevOps highlights:**
 - ADR-driven deployment decisions documented before any infrastructure was touched
-- Docker Compose with per-service memory limits (384MB), PostgreSQL tuned for a $20 Lightsail instance
+- Docker Compose with per-service memory limits, PostgreSQL tuned for a $20 Lightsail instance
 - GitHub Actions CI/CD, Nginx reverse proxy, fail2ban hardening, kernel-level SYN flood protection
-- Sliding window rate limiter (5000 req/min general, 1000 req/min auth) with real IP extraction behind proxy
+- Sliding window rate limiter with real IP extraction behind proxy
 
 **Code excerpts:**
 - [Voice capture pipeline](snippets/voice_pipeline.md) — hybrid inference, multilingual NLP, offline resilience
@@ -36,7 +36,7 @@ A full-stack attendance reporting platform for hierarchical church organizations
 - [Outreach AI](snippets/outreach_ai.md) — engagement scoring, churn prediction, priority queue
 
 **Pre-AI-era foundation (built without AI assistance):**
-- [Custom transformer fine-tuning](snippets/transformer_finetuning.md) — BERT intent classifier (44 classes, 87.5% accuracy) + T5 text-to-SQL (ROUGE-L 0.918 GPU → ROUGE-L 0.961 PEFT/LoRA CPU variant, 118K samples) · 3 models published to HuggingFace · all runs tracked in Weights & Biases
+- [Custom transformer fine-tuning](snippets/transformer_finetuning.md) — BERT intent classifier (44 classes, 87.5% accuracy) + T5 text-to-SQL (ROUGE-L 0.961 PEFT/LoRA variant, 118K samples) · 3 models published to HuggingFace · all runs tracked in Weights & Biases
 - [Conversational agent](snippets/conversational_agent.md) — multi-turn dialog state machine with entity extraction and autonomous DB writes via WebSocket (agentic pattern before LangChain existed)
 
 ---
@@ -47,26 +47,26 @@ A full-stack attendance reporting platform for hierarchical church organizations
 A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, retailers, and shoppers across Nigeria and West Africa. Incubated in Abuja with 20+ live retailers, scaling to the Lagos industrial corridor.
 
 **AI highlights:**
-- **5-agent autonomous fleet** — Smart Reorder, Supplier Intelligence, Price Optimization, Inventory Advisor, Product Recommendations — with a declarative LangGraph workflow orchestrator, eval harness (EvalHarness runs registered suites after every execution, pass rates persisted to Redis), and intervention tracker (records human overrides, computes rate + trend per agent per 7-day window); `/harness/health` surfaces all 5 agents in one view
-- **4-provider AI strategy** — `AIProvider` Protocol implemented by RuleBasedProvider, HybridProvider (LangChain LLMProvider + rule fallback), and BedrockProvider (Claude Haiku via `bedrock-runtime`); activated by feature flags (`USE_BEDROCK`, `OPENAI_API_KEY`) — zero downstream changes when provider switches
-- **Production MCP server** — wraps the agent fleet as 6 typed tools (stdio + HTTP transport); open-source [mcp-foundations](https://github.com/johnmoses/mcp-foundations) repo (5 progressive apps) demonstrating MCP protocol from basic FastMCP through full-stack agent bridges
+- **5-agent autonomous fleet** — Smart Reorder, Supplier Intelligence, Price Optimization, Inventory Advisor, Product Recommendations — orchestrated via LangGraph with an eval harness (pass rates persisted to Redis) and an intervention tracker (human override rate + trend per agent per 7-day window)
+- **Multi-provider AI strategy** — pluggable provider architecture (rule-based, LangChain hybrid, AWS Bedrock) activated by feature flags; zero downstream changes when provider switches
+- **Production MCP server** — wraps the agent fleet as typed tools (stdio + HTTP transport); open-source [mcp-foundations](https://github.com/johnmoses/mcp-foundations) repo (5 progressive apps) demonstrating MCP protocol from basic FastMCP through full-stack agent bridges
 - **Arbitrage engine** — 3-layer price scanner (internal + market scouts + external), landed cost calculator (product + shipping + customs + last-mile), opportunity scorer (0–100 composite)
-- **Borderless logistics AI** — route optimization (Haversine), rider matching (composite scoring), demand forecasting (hourly heatmaps), dynamic surge pricing
-- **Social intelligence signals** — tier-specific feed items generated from live transaction data for 3 user tiers; agent health signals (eval pass rate < 80%, intervention rate > 20%) surface in Trade/Supply feeds
+- **Borderless logistics AI** — route optimization, rider matching, demand forecasting (hourly heatmaps), dynamic surge pricing
+- **Social intelligence signals** — tier-specific feed items generated from live transaction data; agent health signals surface in business-tier feeds
 
-**Cloud-native ML infrastructure:**
-- **Lambda + EventBridge** — 5 production handlers (retrain_trigger, escrow_release ×4 schedules, arbitrage_scan ×3 schedules, listing_expiry, payout_processor); stdlib-only, 128MB, 30s timeout; Lambda is the scheduler, backend/AI service owns the logic
-- **Incremental AWS expansion** — 6 feature flags activate independently: `USE_S3_MODELS` (boto3 artifact pull), `USE_TITAN_EMBEDDINGS` (Bedrock Titan vs sentence-transformers), `USE_COMPREHEND` (sentiment on signals), `USE_SAGEMAKER_TRAINING` (training job vs subprocess), `USE_BEDROCK` (BedrockProvider), `USE_RDS_IAM_AUTH` (IAM auth vs password); self-managed equivalent built first so each flag flip is a handler swap, not a rewrite
-- **ECS on EC2 expansion path** — same Docker containers already ECS-compatible (`/health`, stateless, stdout logging); task definition is the only new artifact; ECS Service Auto Scaling on CloudWatch CPU alarms (scale out >70%, scale in <30%)
-- **3-layer monitoring** — infrastructure (CloudWatch filter patterns on structured JSON: error rate, retraining success, slow inference >5s) + model quality (eval harness pass rates via `/harness/health`) + data validation (TFDV drift/skew detection as upstream retrain signal)
-- **24h auto-retraining loop** — asyncio background task; on success reloads recommendation engine in-place; on failure keeps previous version; TFDV drift detection is the trigger signal
+**Cloud & infrastructure:**
+- Lightsail is the stable core — 7 services (backend, AI, web, DB, Redis, MCP, autoheal) run on Docker Compose with self-managed equivalents for every AWS capability; the platform never depends on a managed service being available
+- ECS is a detachable burst layer — containers are ECS-compatible by design (health endpoints, stateless, stdout logging), but ECS only attaches for heavy workloads (model retraining, batch ML inference, large arbitrage scans); if ECS has a cold start, task failure, or cost spike, Lightsail handles the same workload in degraded-but-running mode
+- Lambda sits between them as a pure scheduler — fires the right target (ECS task or Lightsail endpoint) based on availability; owns no business logic
+- Bedrock, RDS, and S3 follow the same pattern: each has a Lightsail-side fallback (local inference, self-managed Postgres, local artifacts); switching is a feature flag, not a rewrite
+- 3-layer observability: infrastructure metrics + model quality (eval harness) + data drift detection (TFDV) as retraining signal
+- 24h auto-retraining loop — reloads recommendation engine in-place on success, keeps previous version on failure
 
 **Full-stack highlights:**
 - 3-provider payment routing (Paga / Paystack / Flutterwave) — intelligent routing saves 45% on processing costs
 - Escrow with milestone releases for B2B, wallet system for instant settlements
 - 7-level ambassador engine with anti-fraud detection and dormancy downgrade
-- Community commerce: group buy lifecycle with per-participant escrow, trust scoring gating verified-only operations
-- Docker Compose: 7 services (db · redis · backend · web · ai · mcp · autoheal), `depends_on: service_healthy`, memory limits per container, all ports bound to `127.0.0.1`
+- Community commerce: group buy lifecycle with per-participant escrow and trust scoring
 
 *Private repo — architecture overview.*
 
@@ -128,15 +128,15 @@ A full-stack B2B/B2C commerce platform connecting manufacturers, distributors, r
 
 ## Credentials
 
-30 courses across 5 institutions — 22 at 100%, 7 above 95%. (Deep Learning: C3 & C5 100%, C1/C2/C4 97%+. NLP: C1–C3 100%, C4 97.5%.)
+30 courses across 5 institutions — 22 at 100%, 7 above 95%.
 
 | Area | Credential | Score |
 |------|-----------|-------|
 | GenAI & Agents | Building GenAI Applications and Agents Specialization (6 courses) | All 100% |
 | AI for Medicine | AI for Medicine Specialization (3 courses) — DenseNet/U-Net, Cox PH, GradCAM | All 100% |
 | MLOps | MLOps for Production Specialization (4 courses) | C1–C3 100%, C4 98% |
-| Deep Learning | Deep Learning Specialization (5 courses) — Neural Nets 97%, Improving DNNs 97.99%, Structuring ML 100%, CNNs 97%, Sequence Models 100% | C3 & C5 100%, others 97%+ |
+| Deep Learning | Deep Learning Specialization (5 courses) | C3 & C5 100%, others 97%+ |
 | NLP | Natural Language Processing Specialization (4 courses) | C1–C3 100%, C4 97.5% |
-| Mathematics | Mathematics for ML: Linear Algebra 100% · Multivariate Calculus 100% · PCA 98.5% · Data Science Math Skills 100% | — |
-| Finance/ML | Investment Management with Python & ML Specialization (4 courses) — Portfolio Construction 100%, Advanced Portfolio Construction 100%, ML for Asset Management 96.89%, ML with Alternative Datasets 100% | 3 courses 100%, 1 at 96.89% |
+| Mathematics | Mathematics for ML: Linear Algebra · Multivariate Calculus · PCA · Data Science Math Skills | All 98%+ |
+| Finance/ML | Investment Management with Python & ML Specialization (4 courses) | 3 courses 100%, 1 at 97%+ |
 | Generative AI | Generative AI with LLMs | — |
